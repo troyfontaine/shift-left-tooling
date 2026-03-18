@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# This helper script is intended to provide a method of validating
+# a commit message for a valid Jira ticket or an alternative
+# accepted prefix that the team working on a project have agreed upon
+
+# Set your Jira project prefix
+jira_prefix="TEM"
+
+check_commit_prefix() {
+  # regex to validate in commit msg
+  commit_regex="(${jira_prefix}-[0-9]+|NO-TICKET|Merge)"
+  error_msg="Aborting commit. Your commit message is missing either a JIRA Issue (\"${jira_prefix}-1111\") or 'Merge'"
+
+  if ! grep -iqE "$commit_regex" "$1"; then
+      echo "$error_msg" >&2
+      exit 1
+  fi
+}
+
+git interpret-trailers --no-divider --if-exists doNothing --trailer "Signed-off-by: $NAME <$EMAIL>" --in-place "$1"

@@ -1,0 +1,13 @@
+pre-commit:
+  commands:
+  scripts:
+    "git-check":
+      runner: bash
+    "branch-check":
+      runner: bash
+
+commit-msg:
+  commands:
+    scripts:
+      "commit-check":
+        runner: bash

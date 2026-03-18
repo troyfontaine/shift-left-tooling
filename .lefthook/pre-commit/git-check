@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2120
+basic_git_checks() {
+  # Perform basic checks of the Git environment
+  NAME=$(git config user.name)
+  EMAIL=$(git config user.email)
+  TEMPLATE=$(git config --global commit.template)
+
+  if [ -z "$TEMPLATE" ]; then
+      echo "empty git config global commit template"
+      exit 1
+  fi
+
+  if [ -z "$NAME" ]; then
+      echo "empty git config user.name"
+      exit 1
+  fi
+
+  if [ -z "$EMAIL" ]; then
+      echo "empty git config user.email"
+      exit 1
+  fi
+
+}
+
+# Basic checks
+basic_git_checks

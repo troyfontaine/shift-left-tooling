@@ -1,0 +1,9 @@
+# macOS specific
+.DS_Store
+
+# Visual Studio Code
+.vscode
+
+# Lefthook
+.lefthook-local
+lefthook-local.yml
