@@ -33,9 +33,11 @@ from lib.jira_provider import JiraProvider, JiraProviderError
 logger = logging.getLogger(__name__)
 
 
-def get_commits_in_range(since_tag: Optional[str] = None,
-                         tag_range: Optional[tuple] = None,
-                         limit: int = 10) -> List[str]:
+def get_commits_in_range(
+    since_tag: Optional[str] = None,
+    tag_range: Optional[tuple] = None,
+    limit: int = 10,
+) -> List[str]:
     """Get commit hashes in specified range.
 
     Args:
@@ -73,7 +75,7 @@ def get_ticket_info_from_jira(ticket_key: str) -> Optional[Dict]:
                 "url": issue.permalink(),
             }
     except JiraProviderError as e:
-        logger.warning(f"Could not get Jira info for {ticket_key}: {e}")
+        logger.warning("Could not get Jira info for %s: %s", ticket_key, e)
         return None
 
 
@@ -186,8 +188,8 @@ def main() -> int:
 
     try:
         # Get commit history
-        logger.info(f"Fetching last {args.last_n_commits} commits...")
-        commits = get_commits_in_range(
+        logger.info("Fetching last %d commits...", args.last_n_commits)
+        _ = get_commits_in_range(
             since_tag=args.since_tag,
             tag_range=tuple(args.tag_range) if args.tag_range else None,
             limit=args.last_n_commits,
@@ -197,7 +199,7 @@ def main() -> int:
         # For now, we'll create a placeholder
         tickets_dict: Dict[str, Dict] = defaultdict(dict)
 
-        logger.info(f"Found {len(tickets_dict)} unique tickets")
+        logger.info("Found %d unique tickets", len(tickets_dict))
 
         # Generate changelog
         if args.format == "markdown":
@@ -209,9 +211,9 @@ def main() -> int:
 
         # Output
         if args.output:
-            with open(args.output, "w") as f:
+            with open(args.output, "w", encoding="utf-8") as f:
                 f.write(changelog)
-            logger.info(f"Changelog written to {args.output}")
+            logger.info("Changelog written to %s", args.output)
             print(f"Changelog written to {args.output}")
         else:
             print(changelog)
@@ -219,10 +221,10 @@ def main() -> int:
         return 0
 
     except GitProviderError as e:
-        logger.error(f"Git error: {e}")
+        logger.error("Git error: %s", e)
         return 1
-    except Exception as e:
-        logger.exception(f"Unexpected error: {e}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        logger.exception("Unexpected error: %s", e)
         return 1
 
 

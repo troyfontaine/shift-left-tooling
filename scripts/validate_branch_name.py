@@ -29,7 +29,12 @@ from lib.git_utils import (
     extract_jira_ticket_from_message,
 )
 from lib.github_provider import GitHubProvider, GitHubProviderError
-from lib.git_utils import GitProviderError, detect_provider, extract_owner_repo, get_git_origin
+from lib.git_utils import (
+    GitProviderError,
+    detect_provider,
+    extract_owner_repo,
+    get_git_origin,
+)
 from lib.jira_provider import JiraProvider, JiraProviderError
 
 logger = logging.getLogger(__name__)
@@ -67,8 +72,12 @@ def validate_github_pattern(branch_name: str) -> Optional[str]:
         issue_number = match.group(1)
         # Check if the variant with dash was used (e.g., 'gh-123')
         if re.search(r"[Gg][Hh]-(\d+)", branch_name):
-            print("Note: Jira will not be checked for branches prefixed with 'gh-'")
-            logger.info("Detected 'gh-' variant in branch name; Jira checking skipped")
+            print(
+                "Note: Jira will not be checked for branches prefixed with 'gh-'"
+            )
+            logger.info(
+                "Detected 'gh-' variant in branch name; Jira checking skipped"
+            )
         return issue_number
     return None
 
@@ -103,7 +112,9 @@ def check_github_issue_exists(issue_number: str) -> bool:
         origin = get_git_origin()
         owner, repo = extract_owner_repo(origin)
         with GitHubProvider() as provider:
-            return provider.validate_issue_exists(owner, repo, int(issue_number))
+            return provider.validate_issue_exists(
+                owner, repo, int(issue_number)
+            )
     except (GitProviderError, GitHubProviderError, ValueError) as e:
         logger.warning(f"Could not validate GitHub issue: {e}")
         return False

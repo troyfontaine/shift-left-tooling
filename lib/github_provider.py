@@ -19,8 +19,6 @@ logger = logging.getLogger(__name__)
 class GitHubProviderError(Exception):
     """Raised when GitHub provider operations fail."""
 
-    pass
-
 
 class GitHubProvider:
     """Provider for GitHub API operations."""
@@ -45,10 +43,12 @@ class GitHubProvider:
         try:
             self.client = Github(self.token, base_url="https://api.github.com")
             # Validate token by attempting to get authenticated user
-            self.client.get_user().login
+            _ = self.client.get_user().login
             logger.debug("GitHub provider initialized successfully")
         except GithubException as e:
-            raise GitHubProviderError(f"Failed to authenticate with GitHub: {e}") from e
+            raise GitHubProviderError(
+                f"Failed to authenticate with GitHub: {e}"
+            ) from e
 
     def get_repository(self, owner: str, repo: str) -> Repository.Repository:
         """Get a GitHub repository object.
@@ -101,7 +101,10 @@ class GitHubProvider:
                     raise
 
             logger.info(
-                f"Found {len(protected_branches)} protected branches in {owner}/{repo}"
+                "Found %d protected branches in %s/%s",
+                len(protected_branches),
+                owner,
+                repo,
             )
             return protected_branches
         except GitHubProviderError:
@@ -133,7 +136,9 @@ class GitHubProvider:
                 f"Failed to get issue #{issue_number} in {owner}/{repo}: {e}"
             ) from e
 
-    def validate_issue_exists(self, owner: str, repo: str, issue_number: int) -> bool:
+    def validate_issue_exists(
+        self, owner: str, repo: str, issue_number: int
+    ) -> bool:
         """Validate that a GitHub issue exists.
 
         Args:
@@ -146,10 +151,12 @@ class GitHubProvider:
         """
         try:
             self.get_issue(owner, repo, issue_number)
-            logger.debug(f"Issue #{issue_number} exists in {owner}/{repo}")
+            logger.debug("Issue #%d exists in %s/%s", issue_number, owner, repo)
             return True
         except GitHubProviderError:
-            logger.debug(f"Issue #{issue_number} not found in {owner}/{repo}")
+            logger.debug(
+                "Issue #%d not found in %s/%s", issue_number, owner, repo
+            )
             return False
 
     def validate_branch_is_protected(
@@ -176,7 +183,9 @@ class GitHubProvider:
         except GithubException as e:
             if e.status == 404:
                 # Branch either doesn't exist or isn't protected
-                logger.debug(f"Branch {branch_name} is not protected or doesn't exist")
+                logger.debug(
+                    "Branch %s is not protected or doesn't exist", branch_name
+                )
                 return False
             raise GitHubProviderError(
                 f"Failed to check protection status of {branch_name} in {owner}/{repo}: {e}"
@@ -185,7 +194,6 @@ class GitHubProvider:
     def close(self) -> None:
         """Close the GitHub client connection."""
         # PyGithub doesn't require explicit cleanup, but we keep this for API consistency
-        pass
 
     def __enter__(self):
         """Context manager entry."""

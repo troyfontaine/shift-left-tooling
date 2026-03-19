@@ -53,15 +53,17 @@ python scripts/get_protected_branches.py
 
 ## Running Tests
 
+Pytest tests are configured via pyproject.toml to always check `lib/` and `scripts/`
+
 ```bash
 # With Docker Compose
 docker-compose run shift-left-tooling pytest tests/
 
 # Locally
-pytest tests/ --cov=lib --cov=scripts --cov-report=html
+pytest tests/ --cov-report=html --cache-clear
 
 # With verbose output
-pytest tests/ -v --cov=lib --cov=scripts
+pytest tests/ -v --cache-clear
 ```
 
 ## Code Quality

@@ -111,7 +111,7 @@ def main() -> int:
         owner, repo = extract_owner_repo(origin)
         provider = args.provider or detect_provider(origin)
 
-        logger.info(f"Repository: {owner}/{repo}, Provider: {provider}")
+        logger.info("Repository: %s/%s, Provider: %s", owner, repo, provider)
 
         # Get protected branches based on provider
         protected_branches: List[str] = []
@@ -122,7 +122,9 @@ def main() -> int:
         elif provider == GitProvider.BITBUCKET:
             protected_branches = get_protected_branches_bitbucket(owner, repo)
         else:
-            logger.error(f"Provider '{provider}' not recognized or not supported")
+            logger.error(
+                "Provider '%s' not recognized or not supported", provider
+            )
             return 1
 
         # Output results
@@ -145,13 +147,13 @@ def main() -> int:
         return 0
 
     except GitProviderError as e:
-        logger.error(f"Git provider error: {e}")
+        logger.error("Git provider error: %s", e)
         return 1
     except (GitHubProviderError, NotImplementedError) as e:
-        logger.error(f"Error: {e}")
+        logger.error("Error: %s", e)
         return 1
-    except Exception as e:
-        logger.exception(f"Unexpected error: {e}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        logger.exception("Unexpected error: %s", e)
         return 1
 
 

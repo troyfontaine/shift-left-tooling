@@ -19,8 +19,6 @@ logger = logging.getLogger(__name__)
 class JiraProviderError(Exception):
     """Raised when Jira provider operations fail."""
 
-    pass
-
 
 class JiraProvider:
     """Provider for Jira API operations."""
@@ -58,7 +56,9 @@ class JiraProvider:
                 self.client.server_info()
                 logger.debug("Jira provider initialized successfully")
             except JIRAError as e:
-                raise JiraProviderError(f"Failed to authenticate with Jira: {e}") from e
+                raise JiraProviderError(
+                    f"Failed to authenticate with Jira: {e}"
+                ) from e
 
     def get_ticket(self, ticket_key: str):
         """Get a Jira ticket by key.
@@ -73,14 +73,18 @@ class JiraProvider:
             JiraProviderError: If ticket is not found or API call fails.
         """
         if not self.client:
-            raise JiraProviderError("Jira client not initialized. Token may be missing.")
+            raise JiraProviderError(
+                "Jira client not initialized. Token may be missing."
+            )
 
         try:
             issue = self.client.issue(ticket_key)
-            logger.debug(f"Found Jira ticket {ticket_key}")
+            logger.debug("Found Jira ticket %s", ticket_key)
             return issue
         except JIRAError as e:
-            raise JiraProviderError(f"Failed to get Jira ticket {ticket_key}: {e}") from e
+            raise JiraProviderError(
+                f"Failed to get Jira ticket {ticket_key}: {e}"
+            ) from e
 
     def validate_ticket_exists(self, ticket_key: str) -> bool:
         """Validate that a Jira ticket exists.
@@ -92,15 +96,17 @@ class JiraProvider:
             bool: True if ticket exists, False otherwise.
         """
         if not self.client:
-            logger.warning("Jira client not initialized. Cannot validate ticket.")
+            logger.warning(
+                "Jira client not initialized. Cannot validate ticket."
+            )
             return False
 
         try:
             self.get_ticket(ticket_key)
-            logger.debug(f"Jira ticket {ticket_key} exists")
+            logger.debug("Jira ticket %s exists", ticket_key)
             return True
         except JiraProviderError:
-            logger.debug(f"Jira ticket {ticket_key} not found")
+            logger.debug("Jira ticket %s not found", ticket_key)
             return False
 
     def get_ticket_status(self, ticket_key: str) -> Optional[str]:
@@ -135,42 +141,38 @@ class JiraProvider:
 class BitbucketProvider:
     """Stub provider for Bitbucket - not yet implemented."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """Initialize Bitbucket provider."""
         logger.warning("Bitbucket provider is not yet implemented")
 
-    def get_protected_branches(self, *args, **kwargs):
+    def get_protected_branches(self, owner: str, repo: str):
         """Get protected branches - not implemented."""
         raise NotImplementedError(
-            "Bitbucket support is not yet implemented. "
-            "Please use GitHub or Jira for now."
+            "Bitbucket support is not yet implemented. Please use GitHub or Jira for now."
         )
 
-    def validate_issue_exists(self, *args, **kwargs):
+    def validate_issue_exists(self, issue_key: str):
         """Validate issue - not implemented."""
         raise NotImplementedError(
-            "Bitbucket support is not yet implemented. "
-            "Please use GitHub or Jira for now."
+            "Bitbucket support is not yet implemented. Please use GitHub or Jira for now."
         )
 
 
 class GitLabProvider:
     """Stub provider for GitLab - not yet implemented."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """Initialize GitLab provider."""
         logger.warning("GitLab provider is not yet implemented")
 
-    def get_protected_branches(self, *args, **kwargs):
+    def get_protected_branches(self, owner: str, repo: str):
         """Get protected branches - not implemented."""
         raise NotImplementedError(
-            "GitLab support is not yet implemented. "
-            "Please use GitHub or Jira for now."
+            "GitLab support is not yet implemented. Please use GitHub or Jira for now."
         )
 
-    def validate_issue_exists(self, *args, **kwargs):
+    def validate_issue_exists(self, issue_key: str):
         """Validate issue - not implemented."""
         raise NotImplementedError(
-            "GitLab support is not yet implemented. "
-            "Please use GitHub or Jira for now."
+            "GitLab support is not yet implemented. Please use GitHub or Jira for now."
         )

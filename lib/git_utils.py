@@ -8,20 +8,16 @@ Provides functions for git repository operations including:
 """
 
 import logging
-import os
 import re
 import subprocess
 from pathlib import Path
 from typing import Optional, Tuple
-from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
 
 class GitProviderError(Exception):
     """Raised when git provider operations fail."""
-
-    pass
 
 
 class GitProvider:
@@ -31,6 +27,9 @@ class GitProvider:
     GITLAB = "gitlab"
     BITBUCKET = "bitbucket"
     UNKNOWN = "unknown"
+
+    def __init__(self):
+        """GitProvider is not meant to be instantiated."""
 
 
 def get_git_root() -> Path:
@@ -91,12 +90,11 @@ def detect_provider(origin_url: str) -> str:
 
     if "github.com" in origin_lower:
         return GitProvider.GITHUB
-    elif "gitlab.com" in origin_lower or "gitlab" in origin_lower:
+    if "gitlab.com" in origin_lower or "gitlab" in origin_lower:
         return GitProvider.GITLAB
-    elif "bitbucket.org" in origin_lower or "bitbucket" in origin_lower:
+    if "bitbucket.org" in origin_lower or "bitbucket" in origin_lower:
         return GitProvider.BITBUCKET
-    else:
-        return GitProvider.UNKNOWN
+    return GitProvider.UNKNOWN
 
 
 def extract_owner_repo(origin_url: str) -> Tuple[str, str]:
@@ -206,7 +204,11 @@ def get_commit_history(limit: int = 10) -> list[str]:
             text=True,
             check=True,
         )
-        commits = [line.split()[0] for line in result.stdout.strip().split("\n") if line]
+        commits = [
+            line.split()[0]
+            for line in result.stdout.strip().split("\n")
+            if line
+        ]
         return commits
     except subprocess.CalledProcessError as e:
         raise GitProviderError("Failed to get commit history") from e
@@ -247,6 +249,8 @@ def extract_github_issue_from_message(message: str) -> Optional[str]:
         issue_number = match.group(1) or match.group(2)
         # Check if the variant with dash was used (e.g., 'gh-123')
         if re.search(r"[Gg][Hh]-(\d+)", message):
-            logger.info("Detected 'gh-' variant in commit message; Jira checking skipped")
+            logger.info(
+                "Detected 'gh-' variant in commit message; Jira checking skipped"
+            )
         return issue_number
     return None

@@ -5,11 +5,17 @@ Handles environment variable loading, validation, and default values.
 
 import logging
 import os
+import re
 from typing import Optional
 
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field, field_validator, ConfigDict, model_validator
-
+from pydantic import (
+    BaseModel,
+    Field,
+    field_validator,
+    ConfigDict,
+    model_validator,
+)
 
 # Load environment variables from .env file if present
 load_dotenv()
@@ -39,7 +45,7 @@ class GitHubConfig(BaseModel):
     @classmethod
     def validate_token_format(cls, v: Optional[str]) -> Optional[str]:
         """Validate GitHub token format if provided."""
-        if v and not v.startswith("ghp_") and not v.startswith("github_pat_"):
+        if v and not v.startswith(("ghp_", "github_pat_")):
             logger.warning(
                 "GitHub token may not be in the correct format. "
                 "Tokens typically start with 'ghp_' or 'github_pat_'"
@@ -75,19 +81,19 @@ class BranchConfig(BaseModel):
     """Branch naming configuration."""
 
     naming_pattern: str = Field(
-        default_factory=lambda: os.getenv("BRANCH_NAMING_PATTERN", r"^[A-Z]+-\d+"),
+        default_factory=lambda: os.getenv(
+            "BRANCH_NAMING_PATTERN", r"^[A-Z]+-\d+"
+        ),
         description="Regex pattern for branch name validation",
     )
 
     @model_validator(mode="after")
     def validate_regex_pattern(self) -> "BranchConfig":
         """Validate regex pattern is valid."""
-        import re
-
         try:
             re.compile(self.naming_pattern)
         except re.error as e:
-            raise ValueError(f"Invalid regex pattern: {e}")
+            raise ValueError(f"Invalid regex pattern: {e}") from e
         return self
 
 

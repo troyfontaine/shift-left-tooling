@@ -42,13 +42,19 @@ def validate_branch_naming(branch_name: str, pattern: str) -> bool:
     try:
         # Check if pattern matches
         if re.match(pattern, branch_name):
-            logger.info(f"Branch name '{branch_name}' matches pattern '{pattern}'")
+            logger.info(
+                "Branch name '%s' matches pattern '%s'", branch_name, pattern
+            )
             return True
         else:
-            logger.warning(f"Branch name '{branch_name}' does not match pattern '{pattern}'")
+            logger.warning(
+                "Branch name '%s' does not match pattern '%s'",
+                branch_name,
+                pattern,
+            )
             return False
     except re.error as e:
-        logger.error(f"Invalid regex pattern: {e}")
+        logger.error("Invalid regex pattern: %s", e)
         return False
 
 
@@ -80,7 +86,7 @@ def main() -> int:
         try:
             branch_name = get_current_branch()
         except GitProviderError as e:
-            logger.error(f"Could not determine current branch: {e}")
+            logger.error("Could not determine current branch: %s", e)
             return 1
 
     # Get naming pattern
@@ -90,8 +96,8 @@ def main() -> int:
         config = get_config()
         pattern = config.branch.naming_pattern
 
-    logger.info(f"Validating branch: {branch_name}")
-    logger.info(f"Pattern: {pattern}")
+    logger.info("Validating branch: %s", branch_name)
+    logger.info("Pattern: %s", pattern)
 
     # Validate branch name
     if validate_branch_naming(branch_name, pattern):

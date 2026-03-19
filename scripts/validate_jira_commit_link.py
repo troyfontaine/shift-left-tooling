@@ -22,7 +22,11 @@ import argparse
 import logging
 import sys
 
-from lib.git_utils import GitProviderError, extract_jira_ticket_from_message, get_commit_message
+from lib.git_utils import (
+    GitProviderError,
+    extract_jira_ticket_from_message,
+    get_commit_message,
+)
 from lib.jira_provider import JiraProvider, JiraProviderError
 
 logger = logging.getLogger(__name__)
@@ -60,33 +64,36 @@ def main() -> int:
             )
             return 1
 
-        logger.info(f"Found Jira ticket reference: {ticket_key}")
+        logger.info("Found Jira ticket reference: %s", ticket_key)
 
         # Optionally check if ticket exists
         if args.check_exists:
             try:
                 with JiraProvider() as provider:
                     if provider.validate_ticket_exists(ticket_key):
-                        print(f"✓ Commit references valid Jira ticket: {ticket_key}")
+                        print(
+                            f"✓ Commit references valid Jira ticket: {ticket_key}"
+                        )
                         return 0
-                    else:
-                        print(f"✗ Jira ticket {ticket_key} does not exist")
-                        return 1
+                    print(f"✗ Jira ticket {ticket_key} does not exist")
+                    return 1
             except JiraProviderError as e:
-                logger.warning(f"Could not verify Jira ticket: {e}")
+                logger.warning("Could not verify Jira ticket: %s", e)
                 logger.warning("Allowing commit (Jira verification failed)")
-                print(f"✓ Commit references Jira ticket: {ticket_key} (verification skipped)")
+                print(
+                    f"✓ Commit references Jira ticket: {ticket_key} (verification skipped)"
+                )
                 return 0
         else:
             print(f"✓ Commit references Jira ticket: {ticket_key}")
             return 0
 
     except GitProviderError as e:
-        logger.error(f"Git error: {e}")
+        logger.error("Git error: %s", e)
         print(f"✗ Error retrieving commit message: {e}")
         return 1
-    except Exception as e:
-        logger.exception(f"Unexpected error: {e}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        logger.exception("Unexpected error: %s", e)
         return 1
 
 
