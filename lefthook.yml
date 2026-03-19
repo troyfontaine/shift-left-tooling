@@ -1,13 +1,42 @@
 pre-commit:
   commands:
+    # Python code quality checks
+    "pylint":
+      glob: "*.py"
+      run: pylint {staged_files}
+      exclude_branches:
+        - "main"
+        - "develop"
+
+    "black-check":
+      glob: "*.py"
+      run: black --check {staged_files}
+      exclude_branches:
+        - "main"
+        - "develop"
+
+    "mypy":
+      glob: "*.py"
+      run: mypy {staged_files}
+      exclude_branches:
+        - "main"
+        - "develop"
+
   scripts:
     "git-check":
       runner: bash
     "branch-check":
       runner: bash
 
+pre-push:
+  scripts:
+    "enforce-protected-branches":
+      runner: bash
+
 commit-msg:
   commands:
     scripts:
       "commit-check":
+        runner: bash
+      "jira-link-check":
         runner: bash

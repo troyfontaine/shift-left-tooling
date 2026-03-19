@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  shift-left-tooling:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shift-left-tooling-dev
+    volumes:
+      - ./.git:/app/.git:ro
+      - ./scripts:/app/scripts:ro
+      - ./lib:/app/lib:ro
+      - ./tests:/app/tests:ro
+    environment:
+      # GitHub API authentication
+      GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+
+      # Jira API authentication
+      JIRA_URL: "${JIRA_URL:-}"
+      JIRA_TOKEN: "${JIRA_TOKEN:-}"
+
+      # Branch naming pattern (regex)
+      BRANCH_NAMING_PATTERN: "${BRANCH_NAMING_PATTERN:-^[A-Z]+-\\d+}"
+
+      # Optional: log level
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+
+    # Allow overriding entrypoint for testing
+    stdin_open: true
+    tty: true
+    networks:
+      - shift-left-network
+
+networks:
+  shift-left-network:
+    driver: bridge

@@ -1,0 +1,10 @@
+#!/bin/bash
+# Commit-msg hook for validating Jira ticket references
+# This script ensures commits reference valid Jira tickets
+
+set -e
+
+# Source the Docker-based validation script
+docker-compose run --rm shift-left-tooling validate-jira-commit-link
+
+exit $?
