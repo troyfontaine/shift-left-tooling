@@ -107,7 +107,7 @@ def main() -> int:
         print(
             f"✗ Branch name '{branch_name}' does not match the required pattern:\n"
             f"  Pattern: {pattern}\n"
-            f"  Example: project-123-feature-description"
+            f"  Example: PROJ-123-feature-description"
         )
         return 1
 

@@ -1,6 +1,6 @@
 # Shift-Left Tooling
 
-[![Build Status](https://github.com/troyfontaine/shift-left-tooling/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/troyfontaine/shift-left-tooling/actions)
+[![Build Status](https://github.com/troyfontaine/shift-left-tooling/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/troyfontaine/shift-left-tooling/actions/workflows/build-and-publish.yml)
 [![Docker Hub](https://img.shields.io/docker/v/troyfontaine/shift-left-tooling)](https://hub.docker.com/r/troyfontaine/shift-left-tooling)
 
 A Docker-based tooling suite for Git and Jira integration, designed to enforce shift-left practices through pre-commit hooks and CLI scripts. Provides branch protection, naming convention validation, Jira ticket linking, and changelog generation.
