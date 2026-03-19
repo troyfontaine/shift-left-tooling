@@ -79,7 +79,7 @@ def get_ticket_info_from_jira(ticket_key: str) -> Optional[Dict]:
         return None
 
 
-def generate_markdown_changelog(tickets_dict: Dict[str, List[Dict]]) -> str:
+def generate_markdown_changelog(tickets_dict: Dict[str, Dict]) -> str:
     """Generate markdown formatted changelog.
 
     Args:
@@ -108,7 +108,7 @@ def generate_markdown_changelog(tickets_dict: Dict[str, List[Dict]]) -> str:
     return "".join(lines)
 
 
-def generate_json_changelog(tickets_dict: Dict[str, List[Dict]]) -> str:
+def generate_json_changelog(tickets_dict: Dict[str, Dict]) -> str:
     """Generate JSON formatted changelog.
 
     Args:
@@ -120,7 +120,7 @@ def generate_json_changelog(tickets_dict: Dict[str, List[Dict]]) -> str:
     return json.dumps(tickets_dict, indent=2)
 
 
-def generate_plain_changelog(tickets_dict: Dict[str, List[Dict]]) -> str:
+def generate_plain_changelog(tickets_dict: Dict[str, Dict]) -> str:
     """Generate plain text formatted changelog.
 
     Args:

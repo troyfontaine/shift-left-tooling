@@ -93,7 +93,7 @@ def check_jira_ticket_exists(ticket_key: str) -> bool:
     """
     try:
         with JiraProvider() as provider:
-            return provider.validate_ticket_exists(ticket_key)
+            return bool(provider.validate_ticket_exists(ticket_key))
     except JiraProviderError as e:
         logger.warning(f"Could not validate Jira ticket: {e}")
         return False
@@ -112,8 +112,8 @@ def check_github_issue_exists(issue_number: str) -> bool:
         origin = get_git_origin()
         owner, repo = extract_owner_repo(origin)
         with GitHubProvider() as provider:
-            return provider.validate_issue_exists(
-                owner, repo, int(issue_number)
+            return bool(
+                provider.validate_issue_exists(owner, repo, int(issue_number))
             )
     except (GitProviderError, GitHubProviderError, ValueError) as e:
         logger.warning(f"Could not validate GitHub issue: {e}")

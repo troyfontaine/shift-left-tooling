@@ -100,7 +100,7 @@ class BranchConfig(BaseModel):
 class AppConfig(BaseModel):
     """Main application configuration."""
 
-    model_config = ConfigDict(env_nested_delimiter="__")
+    model_config = ConfigDict()
 
     github: GitHubConfig = Field(default_factory=GitHubConfig)
     jira: JiraConfig = Field(default_factory=JiraConfig)

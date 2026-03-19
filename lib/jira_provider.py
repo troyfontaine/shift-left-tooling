@@ -120,7 +120,8 @@ class JiraProvider:
         """
         try:
             issue = self.get_ticket(ticket_key)
-            return issue.fields.status.name
+            status_name = issue.fields.status.name
+            return str(status_name) if status_name else None
         except JiraProviderError:
             return None
 
@@ -145,13 +146,13 @@ class BitbucketProvider:
         """Initialize Bitbucket provider."""
         logger.warning("Bitbucket provider is not yet implemented")
 
-    def get_protected_branches(self, owner: str, repo: str):
+    def get_protected_branches(self, owner: str, repo: str) -> list[str]:
         """Get protected branches - not implemented."""
         raise NotImplementedError(
             "Bitbucket support is not yet implemented. Please use GitHub or Jira for now."
         )
 
-    def validate_issue_exists(self, issue_key: str):
+    def validate_issue_exists(self, issue_key: str) -> bool:
         """Validate issue - not implemented."""
         raise NotImplementedError(
             "Bitbucket support is not yet implemented. Please use GitHub or Jira for now."
@@ -165,13 +166,13 @@ class GitLabProvider:
         """Initialize GitLab provider."""
         logger.warning("GitLab provider is not yet implemented")
 
-    def get_protected_branches(self, owner: str, repo: str):
+    def get_protected_branches(self, owner: str, repo: str) -> list[str]:
         """Get protected branches - not implemented."""
         raise NotImplementedError(
             "GitLab support is not yet implemented. Please use GitHub or Jira for now."
         )
 
-    def validate_issue_exists(self, issue_key: str):
+    def validate_issue_exists(self, issue_key: str) -> bool:
         """Validate issue - not implemented."""
         raise NotImplementedError(
             "GitLab support is not yet implemented. Please use GitHub or Jira for now."

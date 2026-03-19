@@ -46,7 +46,8 @@ def get_protected_branches_github(owner: str, repo: str) -> List[str]:
         GitHubProviderError: If unable to retrieve branches.
     """
     with GitHubProvider() as provider:
-        return provider.get_protected_branches(owner, repo)
+        result = provider.get_protected_branches(owner, repo)
+        return list(result) if result else []
 
 
 def get_protected_branches_gitlab(owner: str, repo: str) -> List[str]:
@@ -63,7 +64,8 @@ def get_protected_branches_gitlab(owner: str, repo: str) -> List[str]:
         NotImplementedError: GitLab is not yet supported.
     """
     provider = GitLabProvider()
-    return provider.get_protected_branches(owner, repo)
+    result = provider.get_protected_branches(owner, repo)
+    return list(result) if result else []
 
 
 def get_protected_branches_bitbucket(owner: str, repo: str) -> List[str]:
@@ -80,7 +82,8 @@ def get_protected_branches_bitbucket(owner: str, repo: str) -> List[str]:
         NotImplementedError: Bitbucket is not yet supported.
     """
     provider = BitbucketProvider()
-    return provider.get_protected_branches(owner, repo)
+    result = provider.get_protected_branches(owner, repo)
+    return list(result) if result else []
 
 
 def main() -> int:
