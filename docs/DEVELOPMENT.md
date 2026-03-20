@@ -350,7 +350,7 @@ lefthook install
 
 ## Code Style Guidelines
 
-- **Line Length**: 100 characters max
+- **Line Length**: 80 characters max
 - **Imports**: Use absolute imports from project root
 - **Type Hints**: All functions should have type hints
 - **Docstrings**: All modules, classes, functions

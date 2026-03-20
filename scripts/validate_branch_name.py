@@ -91,7 +91,7 @@ def check_jira_ticket_exists(ticket_key: str) -> bool:
         with JiraProvider() as provider:
             return bool(provider.validate_ticket_exists(ticket_key))
     except JiraProviderError as e:
-        logger.warning(f"Could not validate Jira ticket: {e}")
+        logger.warning("Could not validate Jira ticket: %s", e)
         return False
 
 
@@ -112,7 +112,7 @@ def check_github_issue_exists(issue_number: str) -> bool:
                 provider.validate_issue_exists(owner, repo, int(issue_number))
             )
     except (GitProviderError, GitHubProviderError, ValueError) as e:
-        logger.warning(f"Could not validate GitHub issue: {e}")
+        logger.warning("Could not validate GitHub issue: %s", e)
         return False
 
 
@@ -145,7 +145,7 @@ def main() -> int:
                 print(f"✓ Valid branch name with Jira ticket: {jira_ticket}")
                 return 0
             else:
-                logger.error(f"Jira ticket {jira_ticket} does not exist")
+                logger.error("Jira ticket %s does not exist", jira_ticket)
                 return 1
         else:
             print(f"✓ Valid branch name with Jira ticket: {jira_ticket}")
@@ -154,13 +154,13 @@ def main() -> int:
     # Check for GitHub pattern
     github_issue = validate_github_pattern(branch_name)
     if github_issue:
-        logger.info(f"Found GitHub issue in branch name: {github_issue}")
+        logger.info("Found GitHub issue in branch name: %s", github_issue)
         if args.check_exists:
             if check_github_issue_exists(github_issue):
                 print(f"✓ Valid branch name with GitHub issue: {github_issue}")
                 return 0
             else:
-                logger.error(f"GitHub issue {github_issue} does not exist")
+                logger.error("GitHub issue %s does not exist", github_issue)
                 return 1
         else:
             print(f"✓ Valid branch name with GitHub issue: {github_issue}")
@@ -168,8 +168,9 @@ def main() -> int:
 
     # No valid pattern found
     logger.error(
-        f"Branch name '{branch_name}' does not match Jira (PROJ-123) "
-        "or GitHub (gh123) patterns"
+        "Branch name '%s' does not match Jira (PROJ-123) "
+        "or GitHub (gh123) patterns",
+        branch_name,
     )
     print(
         f"✗ Invalid branch name. Must contain either Jira ticket (PROJ-123) "

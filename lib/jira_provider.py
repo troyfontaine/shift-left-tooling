@@ -23,7 +23,12 @@ class JiraProviderError(Exception):
 class JiraProvider:
     """Provider for Jira API operations."""
 
-    def __init__(self, url: Optional[str] = None, token: Optional[str] = None):
+    def __init__(
+        self,
+        url: Optional[str] = None,
+        token: Optional[str] = None,
+        username: Optional[str] = None,
+    ):
         """Initialize the Jira provider.
 
         Args:
@@ -31,6 +36,8 @@ class JiraProvider:
             token: Jira API token. If not provided, uses JIRA_TOKEN env var. If no
                 token is available, the Jira client is not initialized and some
                 operations will fail.
+            username: Jira username for basic auth. If not provided, uses JIRA_USERNAME
+                env var, defaulting to 'automation'.
 
         Raises:
             JiraProviderError: If no URL is available or if authentication with
@@ -39,6 +46,7 @@ class JiraProvider:
         config = get_config()
         self.url = url or config.jira.url
         self.token = token or config.jira.token
+        self.username = username or config.jira.username or "automation"
 
         if not self.url:
             raise JiraProviderError(
@@ -53,7 +61,7 @@ class JiraProvider:
                 # Use API token authentication
                 self.client = JIRA(
                     server=self.url,
-                    basic_auth=("automation", self.token),
+                    basic_auth=(self.username, self.token),
                 )
                 # Validate connection by getting server info
                 self.client.server_info()

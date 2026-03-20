@@ -60,6 +60,9 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.build.outputs.digest }}
 
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+
   test-image:
     name: Test Docker Image
     runs-on: ubuntu-latest
@@ -69,18 +72,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull pushed image
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ needs.build-and-push.outputs.image-digest }}
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ needs.build-and-push.outputs.image-digest }} shift-left-tooling:latest
+
       - name: Run tests in Docker
         run: |
-          docker-compose run --rm shift-left-tooling pytest tests/ \
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            shift-left-tooling:latest \
+            pytest tests/ \
             --cov=lib \
             --cov=scripts \
             --cov-fail-under=80
 
       - name: Test script execution
         run: |
-          docker-compose run --rm \
+          docker run --rm \
             -e GITHUB_TOKEN='${{ secrets.GITHUB_TOKEN }}' \
-            shift-left-tooling get-protected-branches --help
+            shift-left-tooling:latest \
+            get-protected-branches --help
 
   notify:
     name: Notify on Publish

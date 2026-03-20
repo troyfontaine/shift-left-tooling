@@ -1,10 +1,7 @@
 """Tests for scripts module."""
 
 from unittest import mock
-import sys
 import json
-
-import pytest
 
 from scripts.validate_branch_name import (
     validate_github_pattern,
@@ -42,7 +39,6 @@ from scripts.generate_changelog import (
     main as generate_changelog_main,
 )
 from lib.git_utils import GitProviderError, GitProvider
-from lib.github_provider import GitHubProviderError
 
 
 class TestValidateBranchName:

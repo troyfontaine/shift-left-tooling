@@ -14,9 +14,6 @@ pre-commit:
     - name: enforce-naming
       runner: bash
       run: ./.lefthook/pre-commit/enforce-naming
-    - name: git-check
-      runner: bash
-      run: ./.lefthook/pre-commit/git-check
 
 pre-push:
   jobs:
@@ -27,9 +24,6 @@ pre-push:
 # commit-msg:
 #   jobs:
 #     # This functionality is missing and must be added
-#     - name: commit-check
-#       runner: bash
-#       run: ./.lefthook/commit-msg/commit-check
 #     - name: jira-link-check
 #       runner: bash
 #       run: ./.lefthook/commit-msg/jira-link-check

@@ -5,7 +5,10 @@
 
 set -e
 
-source ~/.bashrc
+if [ -f "$HOME/.bashrc" ]; then
+  # shellcheck source=/dev/null
+  . "$HOME/.bashrc"
+fi
 
 # Source the Docker-based validation script
 COMPOSE_BAKE=true docker compose build

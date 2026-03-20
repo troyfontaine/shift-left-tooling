@@ -1,6 +1,5 @@
 """Tests for git_utils module."""
 
-import os
 import subprocess
 from pathlib import Path
 from unittest import mock

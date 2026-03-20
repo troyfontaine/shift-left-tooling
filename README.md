@@ -100,7 +100,7 @@ docker run -e GITHUB_TOKEN=ghp_xxxx shift-left-tooling get-protected-branches --
 
 ### `validate-branch-name`
 
-Validate a branch name matches Jira ticket pattern (PROJ-123) or GitHub issue pattern (#123).
+Validate a branch name matches Jira ticket pattern (PROJ-123) or GitHub issue pattern (gh123, GH-456, gh-789, GH-123).
 
 **Usage:**
 
