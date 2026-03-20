@@ -241,11 +241,6 @@ docker run shift-left-tooling generate-changelog [OPTIONS]
 - `--output FILE` - Write to file (default: stdout)
 - `--format FORMAT` - Output format: markdown, json, or plain (default: markdown)
 
-**Environment Variables:**
-
-- `JIRA_URL` - Required for Jira ticket lookups
-- `JIRA_TOKEN` - Required for Jira ticket lookups
-
 **Example:**
 
 ```bash

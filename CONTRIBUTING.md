@@ -38,7 +38,7 @@ More detailed explanation if needed. This helps with changelog generation.
 
 ### Code Style
 
-- **Python**: Follow PEP-8 via Black (100 char line length)
+- **Python**: Follow PEP-8 via Black (80 char line length)
 - **Type Hints**: All functions must have type hints
 - **Docstrings**: All modules, classes, and functions must have docstrings
 - **Tests**: Add tests for all new functionality

@@ -163,8 +163,7 @@ shift-left-tooling/
 ├── pyproject.toml                # Tool configuration
 ├── pytest.ini                    # Pytest configuration
 ├── .flake8                       # Flake8 configuration
-├── docker-entrypoint.sh         # Container entrypoint
-├── docker-entrypoint.sh         # Container entrypoint
+├── docker-entrypoint.sh          # Container entrypoint
 ├── .dockerignore                 # Docker build ignore
 ├── README.md                     # Project README
 └── lefthook.yml                  # Lefthook config
@@ -181,6 +180,7 @@ shift-left-tooling/
    - Proper logging and error handling
 
 2. Example structure:
+
    ```python
    #!/usr/bin/env python3
    """Description of script."""
