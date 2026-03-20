@@ -1,13 +1,62 @@
+---
 pre-commit:
-  commands:
-  scripts:
-    "git-check":
+  parallel: true
+  jobs:
+    - name: pylint
+      glob: "*.py"
+      run: pylint {staged_files} --fail-under=8.0
+    - name: black-check
+      glob: "*.py"
+      run: black --check {staged_files}
+    - name: mypy
+      glob: "*.py"
+      run: mypy {staged_files}
+    - name: enforce-naming
       runner: bash
-    "branch-check":
-      runner: bash
+      run: ./.lefthook/pre-commit/enforce-naming
 
-commit-msg:
+pre-push:
+  jobs:
+    - name: enforce-protected-branches
+      runner: bash
+      run: ./.lefthook/pre-push/enforce-protected-branches
+
+# commit-msg:
+#   jobs:
+#     # This functionality is missing and must be added
+#     - name: jira-link-check
+#       runner: bash
+#       run: ./.lefthook/commit-msg/jira-link-check
+
+build-container:
   commands:
-    scripts:
-      "commit-check":
-        runner: bash
+    "build-docker-image":
+      run: |
+        docker build -t shift-left-tooling:latest .
+
+repo-wide:
+  commands:
+    # Python code quality checks
+    "pylint":
+      glob: "*.py"
+      run: |
+        repo_path=$(git rev-parse --show-toplevel)
+        pushd "$repo_path" > /dev/null || exit 1
+        pylint lib/ scripts/ tests/ --fail-under=8.0
+        popd > /dev/null || exit 1
+    "black-fix-formatting":
+      glob: "*.py"
+      run: black lib/ scripts/ tests/
+    "mypy":
+      glob: "*.py"
+      run: mypy lib/ scripts/ tests/
+    "pytest":
+      glob: "*.py"
+      run: |
+        repo_path=$(git rev-parse --show-toplevel)
+        pushd "$repo_path" > /dev/null || exit 1
+        pytest tests/ \
+        --cov=lib \
+        --cov=scripts \
+        --cov-fail-under=80
+        popd > /dev/null || exit 1

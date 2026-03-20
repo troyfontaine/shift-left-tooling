@@ -1,0 +1,16 @@
+#!/bin/bash
+# Pre-push hook for enforcing protected branch restrictions
+# This script prevents pushes to protected branches
+
+set -e
+
+if [ -f "$HOME/.bashrc" ]; then
+  # shellcheck source=/dev/null
+  . "$HOME/.bashrc"
+fi
+
+# Source the Docker-based validation script
+COMPOSE_BAKE=true docker compose build
+docker compose run --rm shift-left-tooling enforce-protected-branches
+
+exit $?
