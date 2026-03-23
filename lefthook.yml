@@ -33,6 +33,18 @@ build-container:
     "build-docker-image":
       run: |
         docker build -t shift-left-tooling:latest .
+    "test-docker-image":
+      run: |
+        repo_path=$(git rev-parse --show-toplevel)
+        docker run --rm \
+          --entrypoint pytest \
+          -v "$repo_path:/workspace" \
+          -w /workspace \
+          shift-left-tooling:latest \
+          tests/ \
+          --cov=lib \
+          --cov=scripts \
+          --cov-fail-under=80
 
 repo-wide:
   commands:
