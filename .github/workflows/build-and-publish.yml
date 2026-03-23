@@ -87,6 +87,7 @@ jobs:
       - name: Run tests in Docker
         run: |
           docker run --rm \
+            --user root \
             --entrypoint pytest \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
@@ -94,6 +95,7 @@ jobs:
             tests/ \
             --cov=lib \
             --cov=scripts \
+            --cov-report=term-missing \
             --cov-fail-under=80
 
       - name: Test script execution
