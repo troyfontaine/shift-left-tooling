@@ -29,7 +29,7 @@ jobs:
 
       - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -87,10 +87,11 @@ jobs:
       - name: Run tests in Docker
         run: |
           docker run --rm \
+            --entrypoint pytest \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
             shift-left-tooling:latest \
-            pytest tests/ \
+            tests/ \
             --cov=lib \
             --cov=scripts \
             --cov-fail-under=80
