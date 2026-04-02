@@ -14,6 +14,12 @@ pre-commit:
     - name: enforce-naming
       runner: bash
       run: ./.lefthook/pre-commit/enforce-naming
+    - name: yamllint
+      glob: "*.yml,*.yaml"
+      run: python3 scripts/validate_yaml.py {staged_files}
+    - name: jsonlint
+      glob: "*.json"
+      run: python3 scripts/validate_json.py {staged_files}
 
 pre-push:
   jobs:
