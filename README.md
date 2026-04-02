@@ -18,12 +18,12 @@ A Docker-based tooling suite for Git and Jira integration, designed to enforce s
 
 ## Support Matrix
 
-| Provider | Protected Branches | Branch/Issue Validation | Status |
-|----------|-------------------|------------------------|--------|
-| GitHub   | ✅ Full Support    | ✅ Full Support         | Stable |
-| Jira     | N/A                | ✅ Full Support         | Stable |
-| GitLab   | ❌ Not Implemented | ❌ Not Implemented      | Planned |
-| Bitbucket| ❌ Not Implemented | ❌ Not Implemented      | Planned |
+| Provider  | Protected Branches | Branch/Issue Validation | Status  |
+| ---       | ---                | ---                     | ---     |
+| GitHub    | ✅ Full Support    | ✅ Full Support         | Stable  |
+| Jira      | N/A                | ✅ Full Support         | Stable  |
+| GitLab    | ❌ Not Implemented | ❌ Not Implemented      | Planned |
+| Bitbucket | ❌ Not Implemented | ❌ Not Implemented      | Planned |
 
 ## Quick Start
 

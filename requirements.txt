@@ -5,6 +5,8 @@ pydantic==2.12.5
 requests==2.32.5
 python-dotenv==1.2.2
 
+yamllint==1.38.0
+
 # Development & testing dependencies
 pytest==9.0.2
 pytest-cov==7.0.0

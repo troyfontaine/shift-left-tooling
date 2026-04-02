@@ -1,4 +1,3 @@
-# Multi-stage build for shift-left-tooling Docker image
 FROM python:3.12-slim AS base
 
 WORKDIR /app

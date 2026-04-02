@@ -19,6 +19,8 @@ Available commands:
   validate-branch-naming         Validate branch follows naming convention
   validate-jira-commit-link      Ensure commit messages reference valid Jira tickets
   generate-changelog             Generate changelog from commit history
+  validate-yaml                  Validate YAML files for syntax and style
+  validate-json                  Validate JSON files for well-formedness
 
 Usage:
   docker run <image> <command> [options]
