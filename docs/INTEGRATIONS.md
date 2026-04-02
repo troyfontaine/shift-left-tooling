@@ -39,14 +39,16 @@ pre-commit:
     - name: tflint
       glob: "*.tf"
       run: |
-        docker run --rm \
-          -v "$(git rev-parse --show-toplevel):/data" \
-          -w /data \
-          ghcr.io/terraform-linters/tflint:latest \
-          --chdir=$(dirname {staged_files})
+        for dir in $(printf '%s\n' {staged_files} | xargs -I{} dirname {} | sort -u); do
+          docker run --rm \
+            -v "$(git rev-parse --show-toplevel):/data" \
+            -w /data \
+            ghcr.io/terraform-linters/tflint:latest \
+            --chdir="$dir"
+        done
 ```
 
-> **Note:** tflint evaluates a module directory, not individual files. The `--chdir` flag points it at the directory containing the staged `.tf` files. For monorepos with multiple Terraform modules, consider running tflint against each module directory separately.
+> **Note:** tflint evaluates a module directory, not individual files. The loop above extracts all unique directories from the staged `.tf` files and runs tflint once per directory, correctly handling monorepos with multiple Terraform modules.
 
 ---
 
@@ -150,11 +152,13 @@ pre-commit:
     - name: tflint
       glob: "*.tf"
       run: |
-        docker run --rm \
-          -v "$(git rev-parse --show-toplevel):/data" \
-          -w /data \
-          ghcr.io/terraform-linters/tflint:latest \
-          --chdir=$(dirname {staged_files})
+        for dir in $(printf '%s\n' {staged_files} | xargs -I{} dirname {} | sort -u); do
+          docker run --rm \
+            -v "$(git rev-parse --show-toplevel):/data" \
+            -w /data \
+            ghcr.io/terraform-linters/tflint:latest \
+            --chdir="$dir"
+        done
 
     - name: checkov
       glob: "*.tf,*.hcl"
