@@ -1,14 +1,7 @@
 """Tests for validate_yaml script."""
 
-import os
-import tempfile
-from pathlib import Path
 from unittest import mock
-
-import pytest
-from yamllint.config import YamlLintConfig
-from yamllint.linter import LintProblem
-
+from yamllint.config import YamlLintConfig  # type: ignore
 from scripts.validate_yaml import lint_file, load_config, main
 
 

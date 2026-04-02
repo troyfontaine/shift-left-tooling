@@ -25,8 +25,8 @@ from typing import List, Optional
 # Add parent directory to path to allow imports from lib
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from yamllint import linter
-from yamllint.config import YamlLintConfig
+from yamllint import linter  # type: ignore
+from yamllint.config import YamlLintConfig  # type: ignore
 
 logger = logging.getLogger(__name__)
 

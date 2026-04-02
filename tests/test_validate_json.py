@@ -1,9 +1,5 @@
 """Tests for validate_json script."""
 
-import json
-import tempfile
-from pathlib import Path
-
 from scripts.validate_json import main, validate_file
 
 
